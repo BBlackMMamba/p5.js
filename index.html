@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Canvas Sketch</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background-color: #f0f0f0;
+        }
+    </style>
+</head>
+<body>
+
+<canvas id="canvas" width="1080" height="1080"></canvas>
+
+<script>
+    const canvas = document.getElementById('canvas');
+    const context = canvas.getContext('2d');
+
+
+    function getRandomColor() {
+        const r = Math.floor(Math.random() * 256);
+        const g = Math.floor(Math.random() * 256);
+        const b = Math.floor(Math.random() * 256);
+        return `rgb(${r},${g},${b})`;
+    }
+
+
+    const width = canvas.width;
+    const height = canvas.height;
+    const cx = width * 0.5;
+    const cy = height * 0.5;
+    const w = width * 0.01;
+    const h = height * 0.1;
+    const num = 40;
+
+    function draw() {
+
+        context.clearRect(0, 0, width, height);
+
+
+        context.fillStyle = getRandomColor();
+        context.fillRect(0, 0, width, height);
+
+        for (let i = 0; i < num; i++) {
+            const slice = (360 / num) * (Math.PI / 180); // Convert degree to radians
+            const angle = slice * i;
+            const radius = width * 0.3;
+
+            const x = cx + radius * Math.sin(angle);
+            const y = cy + radius * Math.cos(angle);
+
+            context.save();
+            context.translate(x, y);
+            context.rotate(-angle);
+            context.scale(Math.random() * (2 - 0.1) + 0.1, Math.random() * (0.5 - 0.1) + 0.1);
+
+            context.beginPath();
+            context.rect(-w * 0.5, Math.random() * (-h * 0.5), w, h);
+            context.fill();
+            context.restore();
+
+            context.save();
+            context.translate(cx, cy);
+            context.rotate(-angle);
+
+            context.lineWidth = Math.random() * (20 - 5) + 5;
+            context.strokeStyle = getRandomColor();
+
+            context.beginPath();
+            context.arc(0, 0, radius * (Math.random() * (1.3 - 0.7) + 0.7), slice * (Math.random() * (-8 - 0) + 0), slice * (Math.random() * (5 - 0) + 0));
+            context.stroke();
+
+            context.restore();
+        }
+    }
+
+
+    draw();
+     setInterval(() => {
+            location.reload(); 
+        }, 1000); 
+</script>
+
+</body>
+</html>
